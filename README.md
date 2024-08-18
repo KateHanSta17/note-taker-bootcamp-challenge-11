@@ -1,4 +1,4 @@
-# 11 Express.js: N
+# 11 Express.js: Note Taker App
 
 ## GitHub URL
 https://github.com/KateHanSta17/note-taker-bootcamp-challenge-11
