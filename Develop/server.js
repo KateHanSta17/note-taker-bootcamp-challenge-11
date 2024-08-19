@@ -13,16 +13,17 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
-// HTML Routes
+// Route to serve the notes page
 app.get('/notes', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/notes.html'));
 });
 
+// Catch-all route to serve the homepage
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-// API Routes
+// API route to get all saved notes
 app.get('/api/notes', (req, res) => {
   fs.readFile('./db/db.json', 'utf8', (err, data) => {
     if (err) {
@@ -33,6 +34,7 @@ app.get('/api/notes', (req, res) => {
   });
 });
 
+// API route to save a new note
 app.post('/api/notes', (req, res) => {
   const { title, text } = req.body;
   const newNote = { title, text, id: uuidv4() };
@@ -50,6 +52,7 @@ app.post('/api/notes', (req, res) => {
       return res.status(500).json({ error: 'Failed to parse notes' });
     }
 
+    // Add the new note to the notes array and save it
     notes.push(newNote);
     fs.writeFile('./db/db.json', JSON.stringify(notes, null, 2), (err) => {
       if (err) {
@@ -83,4 +86,5 @@ app.delete('/api/notes/:id', (req, res) => {
   });
 });
 
+// Start the server on the specified port
 app.listen(PORT, () => console.log(`App listening on PORT ${PORT}`));
